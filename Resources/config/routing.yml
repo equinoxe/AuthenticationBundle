@@ -1,0 +1,14 @@
+security_user_list:
+    pattern:  /user/list
+    defaults: { _controller: AuthenticationBundle:User:list }
+
+security_user_save:
+    pattern:  /user/save
+    defaults: { _controller: AuthenticationBundle:User:save }
+
+_security_login:
+    pattern: /login
+    defaults: { _controller: AuthenticationBundle:Security:login }
+
+_security_check:
+    pattern: /login_check
