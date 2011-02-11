@@ -61,4 +61,21 @@ class Role implements RoleInterface
         return $this->role;
     }
 
+    public function getUid()
+    {
+        return $this->uid;
+    }
+
+    public function setUid($uid)
+    {
+        $this->uid = $uid;
+    }
+
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+
+
+
 }

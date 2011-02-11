@@ -1,3 +1,4 @@
+# User
 security_user_list:
     pattern:  /user/list
     defaults: { _controller: AuthenticationBundle:User:list }
@@ -5,6 +6,18 @@ security_user_list:
 security_user_save:
     pattern:  /user/save
     defaults: { _controller: AuthenticationBundle:User:save }
+
+# Role
+
+security_role_list:
+    pattern:  /role/list
+    defaults: { _controller: AuthenticationBundle:Role:list }
+
+security_role_save:
+    pattern:  /role/save
+    defaults: { _controller: AuthenticationBundle:Role:save }
+    
+# Login
 
 _security_login:
     pattern: /login
