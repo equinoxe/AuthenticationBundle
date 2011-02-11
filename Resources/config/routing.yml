@@ -16,6 +16,10 @@ security_role_list:
 security_role_save:
     pattern:  /role/save
     defaults: { _controller: AuthenticationBundle:Role:save }
+
+security_role_delete:
+    pattern:  /role/delete
+    defaults: { _controller: AuthenticationBundle:Role:delete }
     
 # Login
 

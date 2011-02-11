@@ -34,7 +34,7 @@ class Role implements RoleInterface
      * Name of the role.
      *
      * @var string
-     * @orm:Column(type="string")
+     * @orm:Column(type="string", unique="TRUE")
      */
     protected $role;
 

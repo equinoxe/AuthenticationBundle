@@ -61,26 +61,34 @@ class UserController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
 
-        $user = $em->find('Equinoxe\AuthenticationBundle\Entity\User', $_POST['uid']);
-        try {
-            if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
-                throw new \Exception("Access denied. Role ROLE_ADMIN required.");
-            }
-            $user->setUsername($_POST['userName']);
+        if (isset($_POST['new'])) {
 
-            $roles = new ArrayCollection();
-            foreach($_POST['role'] as $roleName=>$notInteresting) {
-                if (!$role = $em->getRepository('Equinoxe\AuthenticationBundle\Entity\Role')->findOneBy(array('role' => $roleName))) {
-                    throw new \Exception("Specified role " . $roleName . " not found.");
+        } else {
+
+            //
+            // Edit user
+            //
+
+            $user = $em->find('Equinoxe\AuthenticationBundle\Entity\User', $_POST['uid']);
+            try {
+                if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
+                    throw new \Exception("Access denied. Role ROLE_ADMIN required.");
                 }
-                $roles->add($role);
+                $user->setUsername($_POST['userName']);
+
+                $roles = new ArrayCollection();
+                foreach($_POST['role'] as $roleName=>$notInteresting) {
+                    if (!$role = $em->getRepository('Equinoxe\AuthenticationBundle\Entity\Role')->findOneBy(array('role' => $roleName))) {
+                        throw new \Exception("Specified role " . $roleName . " not found.");
+                    }
+                    $roles->add($role);
+                }
+                $user->setRoles($roles);
+                $em->flush();
+                return $this->createResponse("{success: true}");
+            } catch (\Exception $e) {
+                return $this->createResponse("{success: false, error: '" . $e->getMessage() . "'}");
             }
-            $user->setRoles($roles);
-            $em->flush();
-            return $this->createResponse("{success: true}");
-        } catch (\Exception $e) {
-            return $this->createResponse("{success: false, error: '" . $e->getMessage() . "'}");
         }
-        
     }
 }

@@ -54,19 +54,80 @@ class RoleController extends Controller
     public function saveAction()
     {
         $em = $this->get('doctrine.orm.entity_manager');
-
-        $role = $em->find('Equinoxe\AuthenticationBundle\Entity\Role', $_POST['uid']);
         try {
             if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
                 throw new \Exception("Access denied. Role ROLE_ADMIN required.");
             }
-            $role->setRole($_POST['name']);
+            if (isset($_POST['new'])) {
+                
+                //
+                // Create role.
+                //
 
-            $em->flush();
+                if (!isset($_POST['name']) || empty($_POST['name'])) {
+                    throw new \Exception("The name of the role cannot be empty");
+                }
+
+                $role = new \Equinoxe\AuthenticationBundle\Entity\Role($_POST['name']);
+                $em->persist($role);
+                $em->flush();
+
+            } else {
+
+                //
+                // Edit role.
+                //
+
+                $role = $em->find('Equinoxe\AuthenticationBundle\Entity\Role', $_POST['uid']);
+
+                if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
+                    throw new \Exception("Access denied. Role ROLE_ADMIN required.");
+                }
+                $role->setRole($_POST['name']);
+
+                $em->flush();
+            }
+
             return $this->createResponse("{success: true}");
+            
         } catch (\Exception $e) {
             return $this->createResponse("{success: false, error: '" . $e->getMessage() . "'}");
         }
-        
+    }
+
+    public function deleteAction()
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+        try {
+            // Check rights.
+            if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
+                throw new \Exception("Access denied. Role ROLE_ADMIN required.");
+            }
+            // Are roles supplied?
+            if (!isset($_POST['roles']) || empty($_POST['roles'])) {
+                throw new \Exception("No roles supplied.");
+            }
+
+            // Parse them to an array.
+            $roles = array($_POST['roles']);
+            if (\strstr($_POST['roles'], ',')) {
+                $roles = \explode(',', $_POST['roles']);
+            }
+
+            // Delete them.
+            foreach ($roles as $uid) {
+                $role = $em->find('Equinoxe\AuthenticationBundle\Entity\Role', $uid);
+                if (!$role) {
+                    throw new \Exception("Role with id $uid doesn't exist.");
+                }
+                $em->remove($role);
+                $em->flush();
+            }
+
+            return $this->createResponse("{success: true}");
+
+        } catch (\Exception $e) {
+            return $this->createResponse("{success: false, error: '" . $e->getMessage() . "'}");
+        }
     }
 }
