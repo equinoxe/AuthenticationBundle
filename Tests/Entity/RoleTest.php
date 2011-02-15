@@ -20,7 +20,7 @@ class RoleTest extends \Equinoxe\TestBundle\Test\WebTestCase
      */
     protected function setUp()
     {
-        //$this->object = new Role;
+        $this->object = new Role('TEST_ROLE');
     }
 
     /**
@@ -37,10 +37,26 @@ class RoleTest extends \Equinoxe\TestBundle\Test\WebTestCase
      */
     public function testGetRole()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->assertEquals('TEST_ROLE', $this->object->getRole());
     }
 
+    /**
+     * @todo Implement testGetRole().
+     */
+    public function testToString()
+    {
+        $this->assertEquals('TEST_ROLE', (string)$this->object);
+    }
+
+    public function testUid()
+    {
+        $this->object->setUid(3);
+        $this->assertEquals(3, $this->object->getUid());
+    }
+
+    public function testSetRole()
+    {
+        $this->object->setRole('NEW_ROLE');
+        $this->assertEquals('NEW_ROLE', $this->object->getRole());
+    }
 }

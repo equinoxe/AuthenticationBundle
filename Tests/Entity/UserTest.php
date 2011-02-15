@@ -212,4 +212,19 @@ class UserTest extends \Equinoxe\TestBundle\Test\WebTestCase
 
         $this->assertSame(null, $this->object->getPassword());
     }
+
+    public function testEquals()
+    {
+        // Create two users with the same id.
+        $this->object->setUid(3);
+        $otherUser = new User();
+        $otherUser->setUid(3);
+
+        // Same id should mean they are equal.
+        $this->assertTrue($this->object->equals($otherUser));
+
+        // Different id should mean they are not equal.
+        $otherUser->setUid(4);
+        $this->assertFalse($this->object->equals($otherUser));
+    }
 }
