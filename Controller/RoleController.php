@@ -28,13 +28,13 @@ class RoleController extends Controller
      *
      * @return Response The content of the view
      */
-    public function listAction()
+    public function listAction($_format)
     {
-        $em = $this->get('doctrine.orm.entity_manager');
         try {
             if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
                 throw new Exception('Access denied.');
             }
+            $em = $this->get('doctrine.orm.entity_manager');
             $roles = $em->getRepository('Equinoxe\AuthenticationBundle\Entity\Role')->findAll();
             $result = array('total'=>count($roles));
             $result['items'] = array();
@@ -44,34 +44,37 @@ class RoleController extends Controller
                     "name" => $role->getRole()
                 );
             }
-            $response = $this->createResponse(json_encode($result));
+
+            $response = $this->render('SimpleOutputBundle::plain.' . $_format . '.php', array("response" => $result));
+            
             return $response;
+
         } catch (\Exception $e) {
-            return $this->createResponse(\json_encode(array("success"=>false, "error"=>$e->getMessage())));
+            $response = array("success" => false, "error" => $e->getMessage());
+            return $this->render('SimpleOutputBundle::plain.' . $_format . '.php', array("response" => $response));
         }
     }
 
     public function saveAction()
     {
-        $em = $this->get('doctrine.orm.entity_manager');
         try {
             if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
                 throw new \Exception("Access denied. Role ROLE_ADMIN required.");
             }
+
+            if (!isset($_POST['name']) || empty($_POST['name'])) {
+                throw new \Exception("The name of the role cannot be empty");
+            }
+            $em = $this->get('doctrine.orm.entity_manager');
+
             if (isset($_POST['new'])) {
                 
                 //
                 // Create role.
                 //
 
-                if (!isset($_POST['name']) || empty($_POST['name'])) {
-                    throw new \Exception("The name of the role cannot be empty");
-                }
-
                 $role = new \Equinoxe\AuthenticationBundle\Entity\Role($_POST['name']);
                 $em->persist($role);
-                $em->flush();
-
             } else {
 
                 //
@@ -84,9 +87,9 @@ class RoleController extends Controller
                     throw new \Exception("Access denied. Role ROLE_ADMIN required.");
                 }
                 $role->setRole($_POST['name']);
-
-                $em->flush();
             }
+
+             $em->flush();
 
             return $this->createResponse("{success: true}");
             
@@ -95,14 +98,14 @@ class RoleController extends Controller
         }
     }
 
-    public function deleteAction()
+    public function deleteAction($_format)
     {
-        $em = $this->get('doctrine.orm.entity_manager');
         try {
             // Check rights.
             if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
                 throw new \Exception("Access denied. Role ROLE_ADMIN required.");
             }
+
             // Are roles supplied?
             if (!isset($_POST['roles']) || empty($_POST['roles'])) {
                 throw new \Exception("No roles supplied.");
@@ -114,6 +117,8 @@ class RoleController extends Controller
                 $roles = \explode(',', $_POST['roles']);
             }
 
+            $em = $this->get('doctrine.orm.entity_manager');
+
             // Delete them.
             foreach ($roles as $uid) {
                 $role = $em->find('Equinoxe\AuthenticationBundle\Entity\Role', $uid);
@@ -124,10 +129,12 @@ class RoleController extends Controller
                 $em->flush();
             }
 
-            return $this->createResponse("{success: true}");
+            $response = array("success" => true);
+            return $this->render('SimpleOutputBundle::plain.' . $_format . '.php', array("response" => $response));
 
         } catch (\Exception $e) {
-            return $this->createResponse("{success: false, error: '" . $e->getMessage() . "'}");
+            $response = array("success" => false, "error" => $e->getMessage());
+            return $this->render('SimpleOutputBundle::plain.' . $_format . '.php', array("response" => $response));
         }
     }
 }
