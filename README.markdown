@@ -2,6 +2,10 @@ Offers a simple implementation of the Symfony Authentication.
 
 ## Installation
 
+### Requirements
+
+    https://github.com/equinoxe/SimpleOutputBundle
+
 ### Add AuthenticationBundle to your Bundle dir
 
     git submodule add git://github.com/equinoxe/AuthenticationBundle.git src/Equinoxe/AuthenticationBundle

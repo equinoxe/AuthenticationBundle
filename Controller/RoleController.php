@@ -11,7 +11,6 @@
 
 namespace Equinoxe\AuthenticationBundle\Controller;
 
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -30,6 +29,7 @@ class RoleController extends Controller
      */
     public function listAction($_format)
     {
+        $simpleOutput = $this->get('equinoxe.simpleoutput');
         try {
             if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
                 throw new Exception('Access denied.');
@@ -45,13 +45,9 @@ class RoleController extends Controller
                 );
             }
 
-            $response = $this->render('SimpleOutputBundle::plain.' . $_format . '.php', array("response" => $result));
-            
-            return $response;
-
+            return $this->createResponse($simpleOutput->convert($result, $_format));
         } catch (\Exception $e) {
-            $response = array("success" => false, "error" => $e->getMessage());
-            return $this->render('SimpleOutputBundle::plain.' . $_format . '.php', array("response" => $response));
+            return $this->createResponse($simpleOutput->convert($response, $_format));
         }
     }
 
@@ -130,11 +126,11 @@ class RoleController extends Controller
             }
 
             $response = array("success" => true);
-            return $this->render('SimpleOutputBundle::plain.' . $_format . '.php', array("response" => $response));
+            return $this->createResponse($simpleOutput->convert($response, $_format));
 
         } catch (\Exception $e) {
             $response = array("success" => false, "error" => $e->getMessage());
-            return $this->render('SimpleOutputBundle::plain.' . $_format . '.php', array("response" => $response));
+            return $this->createResponse($simpleOutput->convert($response, $_format));
         }
     }
 }

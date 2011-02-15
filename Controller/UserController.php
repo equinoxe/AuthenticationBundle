@@ -28,31 +28,35 @@ class UserController extends Controller
      *
      * @return Response The content of the view
      */
-    public function listAction()
+    public function listAction($_format)
     {
-        $em = $this->get('doctrine.orm.entity_manager');
-
-        $users = $em->getRepository('Equinoxe\AuthenticationBundle\Entity\User')->findAll();
-        $result = array('total'=>1);
-        $result['items'] = array();
-        foreach($users as $user) {
-            $roles = array();
-
-            foreach($user->getRoles() as $role) {
-                $roles[] = $role->getRole();
+        try {
+            if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
+                throw new \Exception("Access denied.");
             }
+            
+            $em = $this->get('doctrine.orm.entity_manager');
 
-            $result['items'][] = array(
-                "uid" =>$user->getUid(),
-                "userName" =>$user->getUsername(),
-                "roles" => $roles
-            );
-        }
+            $users = $em->getRepository('Equinoxe\AuthenticationBundle\Entity\User')->findAll();
+            $result = array('total' => 1);
+            $result['items'] = array();
+            foreach ($users as $user) {
+                $roles = array();
 
-        if ($this->get('security.context')->vote('ROLE_ADMIN')) {
+                foreach ($user->getRoles() as $role) {
+                    $roles[] = $role->getRole();
+                }
+
+                $result['items'][] = array(
+                    "uid" => $user->getUid(),
+                    "userName" => $user->getUsername(),
+                    "roles" => $roles
+                );
+            }
+            
             $response = $this->createResponse(json_encode($result));
             return $response;
-        } else {
+        } catch (Exception $e) {
             return $this->createResponse("{success: false, error: 'Access denied.'}");
         }
     }
