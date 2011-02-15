@@ -1,11 +1,13 @@
 # User
 security_user_list:
-    pattern:  /user/list
-    defaults: { _controller: AuthenticationBundle:User:list }
+    pattern:  /user/list.{_format}
+    defaults: { _controller: AuthenticationBundle:User:list, _format: json }
+    requirements: { _format: (xml|json) }
 
 security_user_save:
-    pattern:  /user/save
-    defaults: { _controller: AuthenticationBundle:User:save }
+    pattern:  /user/save.{_format}
+    defaults: { _controller: AuthenticationBundle:User:save, _format: json }
+    requirements: { _format: (xml|json) }
 
 # Role
 
@@ -15,8 +17,9 @@ security_role_list:
     requirements: { _format: (xml|json) }
 
 security_role_save:
-    pattern:  /role/save
-    defaults: { _controller: AuthenticationBundle:Role:save }
+    pattern:  /role/save.{_format}
+    defaults: { _controller: AuthenticationBundle:Role:save, _format: json }
+    requirements: { _format: (xml|json) }
 
 security_role_delete:
     pattern:  /role/delete.{_format}
