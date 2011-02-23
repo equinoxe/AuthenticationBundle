@@ -34,16 +34,22 @@ class RoleController extends Controller
             if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
                 throw new Exception('Access denied.');
             }
+
             $em = $this->get('doctrine.orm.entity_manager');
             $roles = $em->getRepository('Equinoxe\AuthenticationBundle\Entity\Role')->findAll();
-            $result = array('total'=>count($roles));
-            $result['items'] = array();
+
+            $resultList = array();
             foreach($roles as $role) {
-                $result['items'][] = array(
+                $resultList[] = array(
                     "uid" => $role->getUid(),
                     "name" => $role->getRole()
                 );
             }
+
+            $result = array(
+                'total' => count($roles),
+                'items' => $resultList
+            );
 
             return $this->createResponse($simpleOutput->convert($result, $_format));
         } catch (\Exception $e) {
