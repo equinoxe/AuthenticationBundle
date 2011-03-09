@@ -12,6 +12,8 @@
 namespace Equinoxe\AuthenticationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -51,9 +53,9 @@ class RoleController extends Controller
                 'items' => $resultList
             );
 
-            return $this->createResponse($simpleOutput->convert($result, $_format));
+            return new Response($simpleOutput->convert($result, $_format));
         } catch (\Exception $e) {
-            return $this->createResponse($simpleOutput->convert($response, $_format));
+            return new Response($simpleOutput->convert($response, $_format));
         }
     }
 
@@ -93,10 +95,10 @@ class RoleController extends Controller
 
              $em->flush();
 
-            return $this->createResponse("{success: true}");
+            return new Response("{success: true}");
             
         } catch (\Exception $e) {
-            return $this->createResponse("{success: false, error: '" . $e->getMessage() . "'}");
+            return new Response("{success: false, error: '" . $e->getMessage() . "'}");
         }
     }
 
@@ -132,11 +134,11 @@ class RoleController extends Controller
             }
 
             $response = array("success" => true);
-            return $this->createResponse($simpleOutput->convert($response, $_format));
+            return new Response($simpleOutput->convert($response, $_format));
 
         } catch (\Exception $e) {
             $response = array("success" => false, "error" => $e->getMessage());
-            return $this->createResponse($simpleOutput->convert($response, $_format));
+            return new Response($simpleOutput->convert($response, $_format));
         }
     }
 }

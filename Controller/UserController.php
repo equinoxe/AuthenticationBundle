@@ -14,6 +14,7 @@ namespace Equinoxe\AuthenticationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Controller for main Flexiflow tasks.
@@ -54,10 +55,10 @@ class UserController extends Controller
                 );
             }
             
-            $response = $this->createResponse(json_encode($result));
+            $response = new Response(json_encode($result));
             return $response;
         } catch (Exception $e) {
-            return $this->createResponse("{success: false, error: 'Access denied.'}");
+            return new Response("{success: false, error: 'Access denied.'}");
         }
     }
 
@@ -89,9 +90,9 @@ class UserController extends Controller
                 }
                 $user->setRoles($roles);
                 $em->flush();
-                return $this->createResponse("{success: true}");
+                return new Response("{success: true}");
             } catch (\Exception $e) {
-                return $this->createResponse("{success: false, error: '" . $e->getMessage() . "'}");
+                return new Response("{success: false, error: '" . $e->getMessage() . "'}");
             }
         }
     }
