@@ -30,7 +30,8 @@ security_role_delete:
 
 _security_login:
     pattern: /login
-    defaults: { _controller: AuthenticationBundle:Security:login }
+    defaults:
+      _controller: AuthenticationBundle:Security:login
 
 _security_check:
     pattern: /login_check

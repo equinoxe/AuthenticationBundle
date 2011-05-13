@@ -25,4 +25,11 @@ class SecurityController extends Controller
             'error'         => $error,
         ));
     }
+    
+    
+    public function loginCheckAction() 
+    {
+        // Hopefully, the security layer will intercept this request.
+        return new Response('Wrong credentials.');
+    }
 }

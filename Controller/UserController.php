@@ -32,7 +32,7 @@ class UserController extends Controller
     public function listAction($_format)
     {
         try {
-            if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
+            if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
                 throw new \Exception("Access denied.");
             }
             
@@ -76,7 +76,7 @@ class UserController extends Controller
 
             $user = $em->find('Equinoxe\AuthenticationBundle\Entity\User', $_POST['uid']);
             try {
-                if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
+                if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
                     throw new \Exception("Access denied. Role ROLE_ADMIN required.");
                 }
                 $user->setUsername($_POST['userName']);

@@ -33,7 +33,7 @@ class RoleController extends Controller
     {
         $simpleOutput = $this->get('equinoxe.simpleoutput');
         try {
-            if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
+            if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
                 throw new Exception('Access denied.');
             }
 
@@ -62,7 +62,7 @@ class RoleController extends Controller
     public function saveAction()
     {
         try {
-            if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
+            if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
                 throw new \Exception("Access denied. Role ROLE_ADMIN required.");
             }
 
@@ -87,7 +87,7 @@ class RoleController extends Controller
 
                 $role = $em->find('Equinoxe\AuthenticationBundle\Entity\Role', $_POST['uid']);
 
-                if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
+                if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
                     throw new \Exception("Access denied. Role ROLE_ADMIN required.");
                 }
                 $role->setRole($_POST['name']);
@@ -106,7 +106,7 @@ class RoleController extends Controller
     {
         try {
             // Check rights.
-            if (!$this->get('security.context')->vote('ROLE_ADMIN')) {
+            if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
                 throw new \Exception("Access denied. Role ROLE_ADMIN required.");
             }
 

@@ -11,8 +11,8 @@
 
 namespace Equinoxe\AuthenticationBundle\Entity;
 
-use Symfony\Component\Security\Core\User\AdvancedAccountInterface;
-use Symfony\Component\Security\Core\User\AccountInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Symfony\Component\Security\Encoder\PasswordEncoderInterface;
@@ -22,7 +22,7 @@ use Symfony\Component\Security\Encoder\PasswordEncoderInterface;
  *
  * @orm:Entity
  */
-class User implements AdvancedAccountInterface
+class User implements AdvancedUserInterface
 {
     /**
      * Unique Id for the database.
@@ -243,9 +243,9 @@ class User implements AdvancedAccountInterface
         $this->accountNonLocked = true;
     }
 
-    public function equals(AccountInterface $account)
+    public function equals(UserInterface $user)
     {
-        if ($account->getUid() == $this->getUid()) {
+        if ($user->getUid() == $this->getUid()) {
             return true;
         } else {
             return false;
