@@ -14,13 +14,13 @@ namespace Equinoxe\AuthenticationBundle\Entity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Symfony\Component\Security\Encoder\PasswordEncoderInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Default user class.
  *
- * @orm:Entity
+ * @ORM\Entity
  */
 class User implements AdvancedUserInterface
 {
@@ -28,9 +28,9 @@ class User implements AdvancedUserInterface
      * Unique Id for the database.
      *
      * @var integer
-     * @orm:Id
-     * @orm:Column(type="integer")
-     * @orm:GeneratedValue(strategy="IDENTITY")
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $uid;
 
@@ -38,7 +38,7 @@ class User implements AdvancedUserInterface
      * The username.
      *
      * @var string
-     * @orm:Column(type="string")
+     * @ORM\Column(type="string")
      */
     protected $username;
 
@@ -46,7 +46,7 @@ class User implements AdvancedUserInterface
      * The password.
      *
      * @var string
-     * @orm:Column(type="string", nullable="true")
+     * @ORM\Column(type="string", nullable="true")
      */
     protected $password;
 
@@ -54,7 +54,7 @@ class User implements AdvancedUserInterface
      * The date when this account expires. Null to prevent expiration.
      *
      * @var \DateTime
-     * @orm:Column(type="datetime", nullable="true")
+     * @ORM\Column(type="datetime", nullable="true")
      */
     protected $accountExpireDate = null;
 
@@ -62,7 +62,7 @@ class User implements AdvancedUserInterface
      * The date when the credentials will expire. Null to prevent expiration.
      *
      * @var \DateTime
-     * @orm:Column(type="datetime", nullable="true")
+     * @ORM\Column(type="datetime", nullable="true")
      */
     protected $credentialsExpireDate = null;
 
@@ -70,7 +70,7 @@ class User implements AdvancedUserInterface
      * True if the account is not locked, false otherwise.
      *
      * @var boolean
-     * @orm:Column(type="boolean")
+     * @ORM\Column(type="boolean")
      */
     protected $accountNonLocked = true;
 
@@ -78,17 +78,17 @@ class User implements AdvancedUserInterface
      * True if the account is enabled, false otherwise.
      *
      * @var boolean
-     * @orm:Column(type="boolean")
+     * @ORM\Column(type="boolean")
      */
     protected $enabled = true;
 
     /**
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @orm:ManyToMany(targetEntity="Equinoxe\AuthenticationBundle\Entity\Role")
-     * @orm:JoinTable(name="user_role",
-     *      joinColumns={@orm:JoinColumn(name="user_id", referencedColumnName="uid")},
-     *      inverseJoinColumns={@orm:JoinColumn(name="role_id", referencedColumnName="uid")}
+     * @ORM\ManyToMany(targetEntity="Equinoxe\AuthenticationBundle\Entity\Role")
+     * @ORM\JoinTable(name="user_role",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="uid")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="uid")}
      *      )
      */
     protected $roles;

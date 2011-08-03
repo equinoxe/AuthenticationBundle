@@ -12,11 +12,12 @@
 namespace Equinoxe\AuthenticationBundle\Entity;
 
 use Symfony\Component\Security\Core\Role\RoleInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Default role class.
  *
- * @orm:Entity
+ * @ORM\Entity
  */
 class Role implements RoleInterface
 {
@@ -24,9 +25,9 @@ class Role implements RoleInterface
      * Unique Id for the database.
      *
      * @var integer
-     * @orm:Id
-     * @orm:Column(type="integer")
-     * @orm:GeneratedValue(strategy="IDENTITY")
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $uid;
 
@@ -34,7 +35,7 @@ class Role implements RoleInterface
      * Name of the role.
      *
      * @var string
-     * @orm:Column(type="string", unique="TRUE")
+     * @ORM\Column(type="string", unique="TRUE")
      */
     protected $role;
 
