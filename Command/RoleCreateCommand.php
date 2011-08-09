@@ -11,7 +11,7 @@
 
 namespace Equinoxe\AuthenticationBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,7 +23,7 @@ use Equinoxe\AuthenticationBundle\Entity\Role;
 /**
  * Acts as daemon process and handles all active triggers.
  */
-class RoleCreateCommand extends Command
+class RoleCreateCommand extends ContainerAwareCommand
 {
     /**
      * Configures the command and its help.
